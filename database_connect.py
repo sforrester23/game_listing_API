@@ -32,11 +32,11 @@ class DB_Connect():
             record = all_game_query.fetchone()
             if record is None:
                 break
-            print('Listing ID: {} -- Game Name: {} -- Console: {} -- Price: {} -- Username: {} -- Contact Number: {} -- Location: {}'.format(record[0], record[2], record[3], record[5], record[1], record[4], record[9]))
+            print('Listing ID: {} -- Game Name: {} -- Console: {} -- Price: £{} -- Username: {} -- Contact Number: {} -- Location: {}'.format(record[0], record[2], record[3], record[5], record[1], record[4], record[9]))
 
     def read_entry_game_id(self, listing_id):
         record = self.__filter_query("SELECT * FROM game_info WHERE listing_ID = {}".format(listing_id)).fetchone()
-        return 'Listing ID: {} -- Game Name: {} -- Console: {} -- Price: {} -- Username: {} -- Contact Number: {} -- Location: {}'.format(record[0], record[2], record[3], record[5], record[1], record[4], record[9])
+        return 'Listing ID: {} -- Game Name: {} -- Console: {} -- Price: £{} -- Username: {} -- Contact Number: {} -- Location: {}'.format(record[0], record[2], record[3], record[5], record[1], record[4], record[9])
 
     def read_entry_condition(self, column_condition, column_value):
         game_condition_query = self.__filter_query("SELECT * FROM game_info WHERE {} = '{}'".format(column_condition, column_value))
@@ -44,15 +44,15 @@ class DB_Connect():
             record = game_condition_query.fetchone()
             if record is None:
                 break
-            print('Listing ID: {} -- Game Name: {} -- Console: {} -- Price: {} -- Username: {} -- Contact Number: {} -- Location: {}'.format(record[0], record[2], record[3], record[5], record[1], record[4], record[9]))
+            print('Listing ID: {} -- Game Name: {} -- Console: {} -- Price: £{} -- Username: {} -- Contact Number: {} -- Location: {}'.format(record[0], record[2], record[3], record[5], record[1], record[4], record[9]))
 
     def read_entry_price_range(self, lower_bound, upper_bound):
-        price_range_query = self.__filter_query("SELECT * FROM game_info WHERE price > {} AND price < {}".format(lower_bound, upper_bound))
+        price_range_query = self.__filter_query("SELECT * FROM game_info WHERE price >= {} AND price <= {}".format(lower_bound, upper_bound))
         while True:
             record = price_range_query.fetchone()
             if record is None:
                 break
-            print('Listing ID: {} -- Game Name: {} -- Console: {} -- Price: {} -- Username: {} -- Contact Number: {} -- Location: {}'.format(
+            print('Listing ID: {} -- Game Name: {} -- Console: {} -- Price: £{} -- Username: {} -- Contact Number: {} -- Location: {}'.format(
                     record[0], record[2], record[3], record[5], record[1], record[4], record[9]))
 
     # U - update

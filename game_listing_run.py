@@ -39,6 +39,8 @@ while user_input != 'EXIT':
 
     # if the user chooses option 1 from the main menu
     if user_input == '1':
+        # set up a variable for all listings, never know when it might come in handy...
+        all_listings = game_db.get_all_listings()
         # give them options for what games they'd like to view
         print('That\'s awesome. We\'ve got some absolute belters in today...')
         print('We need to refine a bit of what you\'re looking for. Hope that\'s cool.')
@@ -47,6 +49,7 @@ while user_input != 'EXIT':
         print('2: See games of a certain name!')
         print('3: See games in a price range!')
         print('4: See games in a certain area!')
+        print('5: See games on a particular console!')
         print('Type "back" to go back to the main menu...')
         # ask the user for their choice
         user_input_phase_2 = input('Please choose an option from the above: ').strip().upper()
@@ -54,34 +57,88 @@ while user_input != 'EXIT':
 
         # the whole time the user doesn't input 'BACK', continue doing the following
         while user_input_phase_2 != 'BACK':
-            # if they select option 1 on the next list, print all listings and then break the current while loop
+            # if they select option 1 on the next list, print all listings
             if user_input_phase_2 == '1':
-                print('All listings we have today:')
+                print('All listings we have today for ya, fren\':')
                 game_db.print_all_listings()
 
-            # if they select option 2 on the next list, ask them what game they'd like to see listings for, show them based on that, and then break the current while loop
+            # if they select option 2 on the next list, ask them what game they'd like to see listings for, show them based on that
             elif user_input_phase_2 == '2':
-                ### COULD SHOW LIST HERE?
-                user_input_game_name = input('What is the name of the game you would like to see listings for, you scallywag?')
+                # set up an empty list for game names
+                game_name_list = []
+                # build the list from the all_listings variable
+                for index in range(len(all_listings)):
+                    game_name_list.append(all_listings[index][2])
+                # print the options from the list
+                print('We\'ve got listings in the following games:')
+                for index in range(len(game_name_list)):
+                    print(game_name_list[index])
+                # ask them what theyre choice is
+                user_input_game_name = input('What is the name of the game you would like to see listings for, you scallywag? ')
+                # print the information they require
                 print('Here\'s what we got back for ya:')
                 game_db.read_entry_condition('game_name', user_input_game_name)
 
-            # if they select option 3 on the next list, ask them the lower and upper bounds for price, print all listings based on that and then break the current while loop
+            # if they select option 3 on the next list, ask them the lower and upper bounds for price, print all listings based on that
             elif user_input_phase_2 == '3':
+                # build a price list, so we can see what the min and max values are to tell the user!
+                price_list = []
+                for index in range(len(all_listings)):
+                    # only add the price if it doesn't already exist in the list
+                    if all_listings[index][5] not in price_list:
+                        price_list.append(all_listings[index][5])
+                # tell the user the range of prices we have
+                print('The highest priced item we have is £{}, and the lowest priced item we have is: £{}'.format(max(price_list), min(price_list)))
+                # ask them for their range
                 user_input_lower_price = input('What is the lowest price you\'d like to view? ')
                 user_input_higher_price = input('What is the highest price you\'d like to view? ')
+                # print results based on their input
                 print('Here\'s what we got back for ya:')
                 game_db.read_entry_price_range(user_input_lower_price, user_input_higher_price)
 
-            # if they select option 4 on the next list, ask them what area they'd like to see them in, print all listings based on that criteria and then break the current while loop
+            # if they select option 4 on the next list, ask them what area they'd like to see them in, print all listings based on that criteria
             elif user_input_phase_2 == '4':
+                # set up an empty list for locations:
+                locations_list = []
+                # build the list
+                for index in range(len(all_listings)):
+                    # only add a new list item if we haven't already got it
+                    if all_listings[index][9] not in locations_list:
+                        locations_list.append(all_listings[index][9])
+                # print them from the list
+                print('We\'ve got listings in the following locations:')
+                for index in range(len(locations_list)):
+                    print(locations_list[index])
+                # ask them for their location choice
                 user_input_location = input('What area would you like to see games in? ')
+                # print listings in that area
                 print('Here\'s what we got back for ya:')
                 game_db.read_entry_condition('town', user_input_location)
 
+            # if they chose option 5, to see games for a particular console
+            elif user_input_phase_2 == '5':
+                # set up an empty list for consoles
+                console_list = []
+                # build the list
+                for index in range(len(all_listings)):
+                    # only add them to the list if they aren't already in there
+                    if all_listings[index][3] not in console_list:
+                        console_list.append(all_listings[index][3])
+                # print their options
+                print('We\'ve got games for the following consoles:')
+                for index in range(len(console_list)):
+                    print(console_list[index])
+                # ask them for their choice of console
+                user_input_console_choice = input('Which console would you like to view games for? ')
+                # print the game listings on that console
+                print('Here\'s what we got back for ya:')
+                game_db.read_entry_condition('console', user_input_console_choice)
+
             # if nothing they've put in is a valid option, tell them and then we'll show the menu at the top of the current if statement again
             else:
+                print('***************')
                 print('Sorry, that\'s not a valid option. Please try again...')
+                print('***************')
 
             # give them options again! If they haven't put in a valid option it'll take them here. If they have, it'll break before they get here
             print('Here are some options:')
@@ -101,7 +158,11 @@ while user_input != 'EXIT':
         game_name = input('Game name: ')
         console = input('Console: ')
         contact_num = input('Your contact number: ')
-        price = input('Listing price: ')
+        try:
+            price = int(input('Listing price: '))
+        except ValueError:
+            print('The Price needs to be a number!')
+            continue
         postcode = input('Your postcode: ')
         # make it into a class instance of game listing
         game_listing_input = Game_Listing(username, game_name, console, contact_num, price, postcode)
@@ -110,7 +171,6 @@ while user_input != 'EXIT':
         game_listing_input.get_latitude()
         # get the nearest town to those longitudes and latitudes from another API
         game_listing_input.get_nearest_town()
-        breakpoint()
         # create an entry for this game listing and push it to the database, to make it persistent
         game_db.create_entry(game_listing_input.username, game_listing_input.name, game_listing_input.console, game_listing_input.phone, game_listing_input.price, game_listing_input.postcode, game_listing_input.latitude, game_listing_input.longitude, game_listing_input.town)
         # tell them they were successful in adding it!
@@ -138,7 +198,14 @@ while user_input != 'EXIT':
             # if the user chooses option 1, to update information in the listing
             if user_input_phase_3 == '1':
                 # ask them the id of the listing they'd like to edit
-                user_input_listing_id = int(input('Please input the id for the listing you\'d like to change: '))
+                # print a list so the user can see the IDs they might want to edit
+                print('You\'d like to edit a listing? I hope you\'re serious about that... Here are the options:')
+                game_db.print_all_listings()
+                try:
+                    user_input_listing_id = int(input('Please input the ID for the listing you\'d like to change: '))
+                except ValueError:
+                    print('No, SILLY, you have to put in a number!')
+                    continue
                 # check if the listing id is in our list, i.e. is it valid
                 if user_input_listing_id in game_id_list:
                     # if it is, tell them it is, then do this
@@ -154,7 +221,11 @@ while user_input != 'EXIT':
                     # special case: when the value they want to change is a price (i.e. an integer), we need a different query for it
                     if user_input_column_choice == 5:
                         # ask them what they want to change it to
-                        user_input_new_value = int(input('What is the new desired value for that column?: '))
+                        try:
+                            user_input_new_value = int(input('What is the new desired value for that column?: '))
+                        except ValueError as ValErr:
+                            print('Sorry, that input needs to be a number!')
+                            continue
                         # update it
                         game_db.update_entry(user_input_listing_id, 'price', user_input_new_value)
                         # tell them it's been updated
@@ -184,18 +255,33 @@ while user_input != 'EXIT':
                         game_db.update_entry(user_input_listing_id, 'town', game_listing_change.town)
                         # let them know the update worked
                         print('Update Complete!')
-                    # otherwise, do the update as normal, using a string as the default input
+                    # otherwise, do the update as normal, using a string as the default input. The rest of the db columns are designed to take in strings, so it's fine
                     else:
                         user_input_new_value = input('What is the new desired value for that column?: ')
                         game_db.update_entry(user_input_listing_id, column_choice_list_sql[user_input_column_choice-1], user_input_new_value)
                         print('Update Complete!')
                 # if the listing id is not in our list, tell them it's not!
                 else:
+                    print('***************')
                     print('OOPS! Sorry, that\'s not a listing we have. Please try again...')
+                    print('***************')
+
             elif user_input_phase_3 == '2':
+                print('You\'d like to delete a listing? I hope you\'re serious about that... Here are the options:')
+                game_db.print_all_listings()
                 input_delete = int(input('So which listing would you like to delete? '))
-                game_db.delete_entry(input_delete)
-                print('DESTRUCTION COMPLETE!')
+                if input_delete in game_id_list:
+                    game_db.delete_entry(input_delete)
+                    print('DESTRUCTION COMPLETE!')
+                else:
+                    print('OOPS! Looks like we couldn\'t find that listing... Please try again.')
+                    continue
+
+            # if they haven't entered a valid option, tell them!
+            else:
+                print('***************')
+                print('Sorry, that\'s not a valid option. Please try again...')
+                print('***************')
 
             # give the user some options for editing listing(s)
             print('So, you\'d like to edit a listing...')
@@ -206,7 +292,9 @@ while user_input != 'EXIT':
             user_input_phase_3 = input('Please choose from the above options: ').strip().upper()
     # let the user know that the option they've inputted is invalid, take them back to the main menu
     else:
+        print('***************')
         print('Sorry, that\'s not a valid option. Please try again...')
+        print('***************')
 
     # Give them options again (main menu)
     print('\\\\\\\\\\\\\\\\\\\\ MAIN MENU //////////')
