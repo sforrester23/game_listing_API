@@ -1,3 +1,4 @@
+# import the necessaries
 from game_listing_class import *
 from database_connect import *
 
@@ -7,17 +8,8 @@ database = 'game_listings'
 username = 'SA'
 password = 'Passw0rd2018'
 
+# create an instance for the database to call all database commands
 game_db = DB_Connect(server, database, username, password)
-# game_listing = Game_Listing('snowflake_smasher_86', 'COD', 'Xbox', '07899901479', 40, 'TN27 9SF')
-# print(game_listing)
-
-# game_listing.get_latitude()
-# game_listing.get_longitude()
-# game_listing.get_nearest_town()
-#
-# print(game_listing.latitude)
-# print(game_listing.longitude)
-# print(game_listing.town)
 
 # Welcome the user
 print('WELCOME TO BUY-S3LL-G4M3Z.COM!!! WHERE GAMING IS A STATE OF MIND... And the mind is one big game...')
@@ -308,5 +300,3 @@ while user_input != 'EXIT':
     # send the user a goodbye message, should they choose to leave
     if user_input == 'EXIT':
         print('Goodbye, we hope to see you again!')
-
-
