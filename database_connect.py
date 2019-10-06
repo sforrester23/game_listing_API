@@ -40,14 +40,19 @@ class db_connect():
 
     # U - update
     def update_entry(self, listing_id, column_to_update, new_value):
-        # if its price you'd like to update, we need to change the query so it doesn't make an integer a string
-        if column_to_update == 'price':
+        # if its price, longitude or latitude you'd like to update, we need to change the query so it doesn't make an integer a string
+        if column_to_update == 'price' or column_to_update == 'longitude' or column_to_update == 'latitude':
             self.__filter_query("UPDATE game_info SET {} = {} WHERE listing_ID = {}".format(column_to_update, new_value, listing_id))
             self.connect_db.commit()
         # if its not price, we need to make sure the query takes an integer to input as the new value
         else:
             self.__filter_query("UPDATE game_info SET {} = '{}' WHERE listing_ID = {}".format(column_to_update, new_value, listing_id))
             self.connect_db.commit()
+
+    # D - delete
+    # based on game ID only (don't want to delete multiple entries of the same game)
+    def delete_entry(self, listing_id):
+        self.__filter_query("DELETE FROM game_info WHERE listing_ID = {}".format(listing_id))
 
     
 
