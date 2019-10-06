@@ -15,6 +15,10 @@ class DB_Connect():
     def __filter_query(self, query):
         return self.cursor.execute(query)
 
+    # method for extracting all listings from the db
+    def get_all_listings(self):
+        return self.__filter_query("SELECT * FROM game_info").fetchall()
+
     # define a set of methods to CRUD our data in the database
     # C - create
     def create_entry(self, username, name, console, phone_number, price, postcode, latitude = '', longitude = '', town = ''):
@@ -31,12 +35,8 @@ class DB_Connect():
             print('Listing ID: {} -- Game Name: {} -- Console: {} -- Price: {} -- Username: {} -- Contact Number: {} -- Location: {}'.format(record[0], record[2], record[3], record[5], record[1], record[4], record[9]))
 
     def read_entry_game_id(self, listing_id):
-        game_id_query = self.__filter_query("SELECT * FROM game_info WHERE listing_ID = {}".format(listing_id))
-        while True:
-            record = game_id_query.fetchone()
-            if record is None:
-                break
-            print('Listing ID: {} -- Game Name: {} -- Console: {} -- Price: {} -- Username: {} -- Contact Number: {} -- Location: {}'.format(record[0], record[2], record[3], record[5], record[1], record[4], record[9]))
+        record = self.__filter_query("SELECT * FROM game_info WHERE listing_ID = {}".format(listing_id)).fetchone()
+        return 'Listing ID: {} -- Game Name: {} -- Console: {} -- Price: {} -- Username: {} -- Contact Number: {} -- Location: {}'.format(record[0], record[2], record[3], record[5], record[1], record[4], record[9])
 
     def read_entry_condition(self, column_condition, column_value):
         game_condition_query = self.__filter_query("SELECT * FROM game_info WHERE {} = '{}'".format(column_condition, column_value))
@@ -56,6 +56,7 @@ class DB_Connect():
                     record[0], record[2], record[3], record[5], record[1], record[4], record[9]))
 
     # U - update
+    # we'll only update values based on listing ID, as it's unique
     def update_entry(self, listing_id, column_to_update, new_value):
         # if its price, longitude or latitude you'd like to update, we need to change the query so it doesn't make an integer a string
         if column_to_update == 'price' or column_to_update == 'longitude' or column_to_update == 'latitude':
