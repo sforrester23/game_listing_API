@@ -5,14 +5,15 @@ from database_connect import *
 
 # define class for game listing, including its attributes
 class Game_Listing():
-    def __init__(self, id, name, phone, price, postcode, latitude = '', longitude = '', town = ''):
-        self.id = id
+    def __init__(self, username, name, console, phone, price, postcode, longitude = '', latitude = '', town = ''):
+        self.username = username
         self.name = name
+        self.console = console
         self.phone = phone
         self.price = price
         self.postcode = postcode
-        self.latitude = latitude
         self.longitude = longitude
+        self.latitude = latitude
         self.town = town
 
     # method for getting longitude from the current postcode using postcodes.io API

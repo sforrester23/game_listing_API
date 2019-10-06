@@ -17,8 +17,8 @@ class DB_Connect():
 
     # define a set of methods to CRUD our data in the database
     # C - create
-    def create_entry(self, name, phone_number, price, location):
-        self.__filter_query("INSERT INTO game_info (game_name, contact_number, price, location) VALUES ('{}', '{}', {}, '{}'".format(name, phone_number, price, location))
+    def create_entry(self, username, name, console, phone_number, price, postcode, latitude = '', longitude = '', town = ''):
+        self.__filter_query("INSERT INTO game_info (username, game_name, console, contact_number, price, postcode, latitude, longitude, town) VALUES ('{}', '{}', '{}', '{}', {}, '{}', {}, {}, '{}')".format(username, name, console, phone_number, price, postcode, latitude, longitude, town))
         self.connect_db.commit()
 
     # R - read (based on either game_listing, game_name, price range)
@@ -28,7 +28,7 @@ class DB_Connect():
             record = all_game_query.fetchone()
             if record is None:
                 break
-            print(record)
+            print('Listing ID: {} -- Game Name: {} -- Console: {} -- Price: {} -- Username: {} -- Contact Number: {} -- Location: {}'.format(record[0], record[2], record[3], record[5], record[1], record[4], record[9]))
 
     def read_entry_game_id(self, listing_id):
         game_id_query = self.__filter_query("SELECT * FROM game_info WHERE listing_ID = {}".format(listing_id))
@@ -36,7 +36,7 @@ class DB_Connect():
             record = game_id_query.fetchone()
             if record is None:
                 break
-            print('Listing ID: {} -- Game Name: {} -- Console: {} -- Price: {} -- Username: {} -- Contact Number: {} -- Location {}'.format(record[0], record[2], record[3], record[5], record[1], record[4], record[9]))
+            print('Listing ID: {} -- Game Name: {} -- Console: {} -- Price: {} -- Username: {} -- Contact Number: {} -- Location: {}'.format(record[0], record[2], record[3], record[5], record[1], record[4], record[9]))
 
     def read_entry_condition(self, column_condition, column_value):
         game_condition_query = self.__filter_query("SELECT * FROM game_info WHERE {} = '{}'".format(column_condition, column_value))
@@ -44,7 +44,7 @@ class DB_Connect():
             record = game_condition_query.fetchone()
             if record is None:
                 break
-            print('Listing ID: {} -- Game Name: {} -- Console: {} -- Price: {} -- Username: {} -- Contact Number: {} -- Location {}'.format(record[0], record[2], record[3], record[5], record[1], record[4], record[9]))
+            print('Listing ID: {} -- Game Name: {} -- Console: {} -- Price: {} -- Username: {} -- Contact Number: {} -- Location: {}'.format(record[0], record[2], record[3], record[5], record[1], record[4], record[9]))
 
     def read_entry_price_range(self, lower_bound, upper_bound):
         price_range_query = self.__filter_query("SELECT * FROM game_info WHERE price > {} AND price < {}".format(lower_bound, upper_bound))
@@ -52,7 +52,7 @@ class DB_Connect():
             record = price_range_query.fetchone()
             if record is None:
                 break
-            print('Listing ID: {} -- Game Name: {} -- Console: {} -- Price: {} -- Username: {} -- Contact Number: {} -- Location {}'.format(
+            print('Listing ID: {} -- Game Name: {} -- Console: {} -- Price: {} -- Username: {} -- Contact Number: {} -- Location: {}'.format(
                     record[0], record[2], record[3], record[5], record[1], record[4], record[9]))
 
     # U - update
