@@ -185,16 +185,16 @@ while user_input != 'EXIT':
     elif user_input == '2':
         # get the user to input the game data of the game they'd like to list
         print('Please enter some information regarding the game you\'d like to list:')
-        username = input('Your username: ')
-        game_name = input('Game name: ')
-        console = input('Console: ')
+        username = input('Your username: ').lower()
+        game_name = input('Game name: ').capitalize()
+        console = input('Console: ').capitalize()
         contact_num = input('Your contact number: ')
         try:
             price = int(input('Listing price: '))
         except ValueError:
             print('The Price needs to be a number!')
             continue
-        postcode = input('Your postcode: ')
+        postcode = input('Your postcode: ').upper()
         # make it into a class instance of game listing
         game_listing_input = Game_Listing(username, game_name, console, contact_num, price, postcode)
         # get the longitude, latitude from the API

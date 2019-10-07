@@ -1,6 +1,6 @@
 --CREATE DATABASE game_listings;
 
---USE game_listings;
+USE game_listings;
 
 
 --CREATE TABLE game_info
