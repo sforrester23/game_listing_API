@@ -1,6 +1,7 @@
 # import the necessaries
 from game_listing_class import *
 from database_connect import *
+import time
 
 # Make the class instance for the database
 server = 'localhost,1433'
@@ -23,6 +24,7 @@ print('3: Edit an existing listing!')
 print('Type exit to leave... Not sure why you\'d ever want to tho?')
 user_input = input('Please select an option: ').strip().upper()
 print(' ')
+
 # send the user a goodbye message, should they choose to leave
 if user_input == 'EXIT':
     print('Goodbye, we hope to see you again!')
@@ -54,6 +56,10 @@ while user_input != 'EXIT':
             if user_input_phase_2 == '1':
                 print('All listings we have today for ya, fren\':')
                 game_db.print_all_listings()
+                print(' ')
+                time.sleep(2)
+                print('I\'m workin\' \'ere!')
+                time.sleep(2)
 
             # if they select option 2 on the next list, ask them what game they'd like to see listings for, show them based on that
             elif user_input_phase_2 == '2':
@@ -71,6 +77,10 @@ while user_input != 'EXIT':
                 # print the information they require
                 print('Here\'s what we got back for ya:')
                 game_db.read_entry_condition('game_name', user_input_game_name)
+                print(' ')
+                time.sleep(2)
+                print('I\'m workin\' \'ere!')
+                time.sleep(2)
 
             # if they select option 3 on the next list, ask them the lower and upper bounds for price, print all listings based on that
             elif user_input_phase_2 == '3':
@@ -88,6 +98,10 @@ while user_input != 'EXIT':
                 # print results based on their input
                 print('Here\'s what we got back for ya:')
                 game_db.read_entry_price_range(user_input_lower_price, user_input_higher_price)
+                print(' ')
+                time.sleep(2)
+                print('I\'m workin\' \'ere!')
+                time.sleep(2)
 
             # if they select option 4 on the next list, ask them what area they'd like to see them in, print all listings based on that criteria
             elif user_input_phase_2 == '4':
@@ -107,6 +121,10 @@ while user_input != 'EXIT':
                 # print listings in that area
                 print('Here\'s what we got back for ya:')
                 game_db.read_entry_condition('town', user_input_location)
+                print(' ')
+                time.sleep(2)
+                print('I\'m workin\' \'ere!')
+                time.sleep(2)
 
             # if they chose option 5, to see games for a particular console
             elif user_input_phase_2 == '5':
@@ -126,6 +144,10 @@ while user_input != 'EXIT':
                 # print the game listings on that console
                 print('Here\'s what we got back for ya:')
                 game_db.read_entry_condition('console', user_input_console_choice)
+                print(' ')
+                time.sleep(2)
+                print('I\'m workin\' \'ere!')
+                time.sleep(2)
 
             # if the user inputs option 6, to buy a game
             elif user_input_phase_2 == '6':
@@ -135,6 +157,10 @@ while user_input != 'EXIT':
                 # delete that entry, so it can't be purchased again
                 game_db.delete_entry(user_input_purchase_choice)
                 print('You purchased the game from listing #{}! Fantastic choice. Don\'t play it too much and stay in school, kid.'.format(user_input_purchase_choice))
+                print(' ')
+                time.sleep(2)
+                print('I\'m workin\' \'ere!')
+                time.sleep(2)
 
 
             # if nothing they've put in is a valid option, tell them and then we'll show the menu at the top of the current if statement again
@@ -149,6 +175,8 @@ while user_input != 'EXIT':
             print('2: See games of a certain name!')
             print('3: See games in a price range!')
             print('4: See games in a certain area!')
+            print('5: See games on a particular console!')
+            print('6: Buy a Game!')
             print('Type "back" to go back to the main menu...')
             user_input_phase_2 = input('Please choose an option from the above: ').strip().upper()
             print(' ')
@@ -178,6 +206,10 @@ while user_input != 'EXIT':
         game_db.create_entry(game_listing_input.username, game_listing_input.name, game_listing_input.console, game_listing_input.phone, game_listing_input.price, game_listing_input.postcode, game_listing_input.latitude, game_listing_input.longitude, game_listing_input.town)
         # tell them they were successful in adding it!
         print('Game listing added! You can check by choosing option 1 to view listings from the main menu.')
+        print(' ')
+        time.sleep(2)
+        print('I\'m workin\' \'ere!')
+        time.sleep(2)
 
     elif user_input == '3':
         # give the user some options for editing listing(s)
@@ -187,6 +219,7 @@ while user_input != 'EXIT':
         print('2: Delete an existing listing.')
         print('Type "back" to go back...')
         user_input_phase_3 = input('Please choose from the above options: ').strip().upper()
+        print(' ')
         # build a list of listing IDs so we can check if what the user inputs is contained in the list, and therefore valid
         record = game_db.get_all_listings()
         game_id_list = []
@@ -209,6 +242,11 @@ while user_input != 'EXIT':
                 except ValueError:
                     print('No, SILLY, you have to put in a number!')
                     continue
+                print('Checking if we have that listing.....')
+                time.sleep(5)
+                print('I\'m workin\' \'ere!')
+                time.sleep(4)
+
                 # check if the listing id is in our list, i.e. is it valid
                 if user_input_listing_id in game_id_list:
                     # if it is, tell them it is, then do this
@@ -232,6 +270,9 @@ while user_input != 'EXIT':
                         # update it
                         game_db.update_entry(user_input_listing_id, 'price', user_input_new_value)
                         # tell them it's been updated
+                        time.sleep(2)
+                        print('I\'m workin\' \'ere!')
+                        time.sleep(2)
                         print('Update Complete!')
                     # special case: when the value they want to change is a postcode, i.e. we need to get new lat, long and town information and update that too. The way it's set up is you can only get said information if you already have a class instance for that listing set up.
                     elif user_input_column_choice == 6:
@@ -256,13 +297,18 @@ while user_input != 'EXIT':
                         game_db.update_entry(user_input_listing_id, 'latitude', game_listing_change.latitude)
                         game_db.update_entry(user_input_listing_id, 'longitude', game_listing_change.longitude)
                         game_db.update_entry(user_input_listing_id, 'town', game_listing_change.town)
+                        time.sleep(2)
+                        print('I\'m workin\' \'ere!')
+                        time.sleep(2)
                         # let them know the update worked
                         print('Update Complete!')
+                        print(' ')
                     # otherwise, do the update as normal, using a string as the default input. The rest of the db columns are designed to take in strings, so it's fine
                     else:
                         user_input_new_value = input('What is the new desired value for that column?: ')
                         game_db.update_entry(user_input_listing_id, column_choice_list_sql[user_input_column_choice-1], user_input_new_value)
                         print('Update Complete!')
+                        print(' ')
                 # if the listing id is not in our list, tell them it's not!
                 else:
                     print('***************')
@@ -276,6 +322,7 @@ while user_input != 'EXIT':
                 if input_delete in game_id_list:
                     game_db.delete_entry(input_delete)
                     print('DESTRUCTION COMPLETE!')
+                    print(' ')
                 else:
                     print('OOPS! Looks like we couldn\'t find that listing... Please try again.')
                     continue
@@ -293,6 +340,7 @@ while user_input != 'EXIT':
             print('2: Delete an existing listing.')
             print('Type "back" to go back to the main menu...')
             user_input_phase_3 = input('Please choose from the above options: ').strip().upper()
+            print(' ')
 
     # let the user know that the option they've inputted is invalid, take them back to the main menu
     else:
