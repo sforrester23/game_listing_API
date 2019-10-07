@@ -42,6 +42,7 @@ while user_input != 'EXIT':
         print('3: See games in a price range!')
         print('4: See games in a certain area!')
         print('5: See games on a particular console!')
+        print('6: Buy a Game!')
         print('Type "back" to go back to the main menu...')
         # ask the user for their choice
         user_input_phase_2 = input('Please choose an option from the above: ').strip().upper()
@@ -125,6 +126,16 @@ while user_input != 'EXIT':
                 # print the game listings on that console
                 print('Here\'s what we got back for ya:')
                 game_db.read_entry_condition('console', user_input_console_choice)
+
+            # if the user inputs option 6, to buy a game
+            elif user_input_phase_2 == '6':
+                # ask the user for their choice of game listing ID
+                print('Which game would you like to buy?')
+                user_input_purchase_choice = int(input('Please enter the listing ID for the game you\'d like to buy: '))
+                # delete that entry, so it can't be purchased again
+                game_db.delete_entry(user_input_purchase_choice)
+                print('You purchased the game from listing #{}! Fantastic choice. Don\'t play it too much and stay in school, kid.'.format(user_input_purchase_choice))
+
 
             # if nothing they've put in is a valid option, tell them and then we'll show the menu at the top of the current if statement again
             else:
@@ -282,6 +293,7 @@ while user_input != 'EXIT':
             print('2: Delete an existing listing.')
             print('Type "back" to go back to the main menu...')
             user_input_phase_3 = input('Please choose from the above options: ').strip().upper()
+
     # let the user know that the option they've inputted is invalid, take them back to the main menu
     else:
         print('***************')
